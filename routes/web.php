@@ -21,6 +21,10 @@ Route::middleware('guest')->group(function () {
 
 // 3. Kelompok Rute Khusus Pengguna Terautentikasi (Sudah Login / Auth Middleware)
 Route::middleware('auth')->group(function () {
+    // RUTE BARU CUSTOMER: Proses Sewa Alat (Sekarang tidak akan error lagi)
+    Route::get('/customer/rent/{equipment}', [TransactionController::class, 'create'])->name('rent.create');
+    Route::post('/customer/rent/{equipment}', [TransactionController::class, 'store'])->name('rent.store');
+
     // Proses Keluar Aplikasi (Logout)
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
@@ -32,9 +36,6 @@ Route::middleware('auth')->group(function () {
     // Otomatis Mengelola Seluruh Endpoint CRUD Alat Fotografi
     Route::resource('/admin/equipment', EquipmentController::class);
 
-    // RUTE BARU CUSTOMER: Proses Sewa Alat (Sekarang tidak akan error lagi)
-    Route::get('/customer/rent/{equipment}', [TransactionController::class, 'create'])->name('rent.create');
-    Route::post('/customer/rent/{equipment}', [TransactionController::class, 'store'])->name('rent.store');
 
     // RUTE BARU CUSTOMER: Melihat Riwayat Sewa Alat
     Route::get('/customer/history', [TransactionController::class, 'history'])->name('rent.history');
