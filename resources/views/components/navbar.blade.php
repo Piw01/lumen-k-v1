@@ -13,7 +13,7 @@
                     <a class="nav-link" href="#">Katalog Alat</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Riwayat Sewa</a>
+                    <a class="nav-link" href="/customer/history">Riwayat Sewa</a>
                 </li>
                 
                 <!-- JIKA PENGGUNA SUDAH LOGIN -->

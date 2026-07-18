@@ -38,11 +38,13 @@ class TransactionController extends Controller
 
         // Menggunakan Database Transaction demi keamanan data (ACID)
         DB::transaction(function () use ($request, $equipment, $totalPrice) {
-            // A. Simpan ke tabel transactions
+            // A. Simpan ke tabel transactions (Sudah ditambahkan start_date & end_date)
             $transaction = Transaction::create([
                 'user_id' => Auth::id(),
+                'start_date' => $request->start_date, // <-- BARIS BARU: Menyimpan tanggal mulai
+                'end_date' => $request->end_date,     // <-- BARIS BARU: Menyimpan tanggal selesai
                 'total_price' => $totalPrice,
-                'status' => 'pending', // Status awal sewa
+                'status' => 'pending', 
             ]);
 
             // B. Simpan ke tabel transaction_details
@@ -55,9 +57,23 @@ class TransactionController extends Controller
 
             // C. POTONG STOK ALAT: Mengurangi stok kamera di database
             $equipment->stock_quantity -= $request->quantity;
-            $equipment->save();    
+            $equipment->save();
         });
 
         return redirect('/')->with('success', 'Pesanan sewa berhasil dibuat! Silakan tunggu konfirmasi admin.');
+    }
+    /**
+     * Menampilkan riwayat transaksi sewa milik customer yang sedang login.
+     */
+    public function history()
+    {
+        // Mengambil transaksi milik user yang login, diurutkan dari yang paling baru
+        // Menggunakan eager loading 'transactionDetails.equipment' agar query efisien
+        $transactions = Transaction::where('user_id', Auth::id())
+            ->with('transactionDetails.equipment')
+            ->latest()
+            ->get();
+
+        return view('customer.history', compact('transactions'));
     }
 }

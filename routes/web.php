@@ -35,4 +35,7 @@ Route::middleware('auth')->group(function () {
     // RUTE BARU CUSTOMER: Proses Sewa Alat (Sekarang tidak akan error lagi)
     Route::get('/customer/rent/{equipment}', [TransactionController::class, 'create'])->name('rent.create');
     Route::post('/customer/rent/{equipment}', [TransactionController::class, 'store'])->name('rent.store');
+
+    // RUTE BARU CUSTOMER: Melihat Riwayat Sewa Alat
+    Route::get('/customer/history', [TransactionController::class, 'history'])->name('rent.history');
 });
