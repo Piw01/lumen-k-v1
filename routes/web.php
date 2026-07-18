@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EquipmentController; // <-- BARIS BARU: Import Controller Alat
 
-// Halaman Utama (Welcome)
+// Halaman Utama
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,8 +19,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // Rute dashboard admin baru
+    // Dashboard Admin
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     });
+
+    // RUTE BARU: Mengatur CRUD data alat fotografi otomatis untuk Admin
+    Route::resource('/admin/equipment', EquipmentController::class);
 });

@@ -17,7 +17,7 @@
                 <div class="card-body p-4">
                     <h6 class="text-uppercase fw-semibold text-white-50">Total Alat (Katalog)</h6>
                     <h2 class="display-6 fw-bold my-2">4 Alat</h2>
-                    <a href="#" class="text-white-50 text-decoration-none small">Kelola Alat CRUD <i class="bi bi-arrow-right ms-1"></i></a>
+                    <a href="/admin/equipment" class="text-white-50 text-decoration-none small">Kelola Alat CRUD <i class="bi bi-arrow-right ms-1"></i></a>
                 </div>
             </div>
         </div>
