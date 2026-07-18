@@ -46,7 +46,7 @@
                                 <td class="text-center pe-4">
                                     <div class="d-flex justify-content-center gap-2">
                                         <!-- Tombol Edit -->
-                                        <a href="#" class="btn btn-outline-primary btn-sm px-2.5">
+                                        <a href="{{ route('equipment.edit', $item->id) }}" class="btn btn-outline-primary btn-sm px-2.5">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <!-- Form & Tombol Hapus (DELETE) -->
