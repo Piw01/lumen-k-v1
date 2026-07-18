@@ -29,4 +29,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    // Pastikan fillable terlihat seperti ini:
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role', // <-- Tambahkan koma dan tulisan ini
+    ];
+
+    // Tambahkan block kode ini di paling bawah (sebelum } penutup class):
+    public function transactions()
+    {
+        // Artinya: 1 User bisa memiliki banyak (hasMany) Transaksi
+        return $this->hasMany(Transaction::class);
+    }
 }
