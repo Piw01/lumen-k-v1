@@ -54,7 +54,8 @@ class TransactionController extends Controller
             ]);
 
             // C. POTONG STOK ALAT: Mengurangi stok kamera di database
-            $equipment->decrement('stock_quantity', $request->quantity);
+            $equipment->stock_quantity -= $request->quantity;
+            $equipment->save();    
         });
 
         return redirect('/')->with('success', 'Pesanan sewa berhasil dibuat! Silakan tunggu konfirmasi admin.');

@@ -3,13 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EquipmentController;
-use App\Http\Controllers\TransactionController;
-
+use App\Http\Controllers\TransactionController; // <-- SOLUSI: Import Controller Transaksi
+use App\Models\Equipment; // <-- SOLUSI: Import Model Equipment agar lebih rapi
 
 // 1. Halaman Utama Aplikasi (Welcome Page)
 Route::get('/', function () {
-    // Mengambil semua alat yang stoknya lebih dari 0
-    $equipment = \App\Models\Equipment::query()->where('stock_quantity', '>', 0)->get();
+    // Kodenya jadi lebih bersih tanpa awalan \App\Models\
+    $equipment = Equipment::where('stock_quantity', '>', 0, 'and')->get();
     return view('welcome', compact('equipment'));
 });
 
@@ -30,10 +30,9 @@ Route::middleware('auth')->group(function () {
     });
 
     // Otomatis Mengelola Seluruh Endpoint CRUD Alat Fotografi
-    // (Mencakup: index, create, store, show, edit, update, destroy)
     Route::resource('/admin/equipment', EquipmentController::class);
 
-    // RUTE BARU CUSTOMER: Proses Sewa Alat
+    // RUTE BARU CUSTOMER: Proses Sewa Alat (Sekarang tidak akan error lagi)
     Route::get('/customer/rent/{equipment}', [TransactionController::class, 'create'])->name('rent.create');
     Route::post('/customer/rent/{equipment}', [TransactionController::class, 'store'])->name('rent.store');
 });
