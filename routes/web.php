@@ -18,5 +18,8 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // Nanti kita akan tambahkan route khusus admin dan customer di sini
+    // Rute dashboard admin baru
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    });
 });
