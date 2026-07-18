@@ -33,9 +33,14 @@
                             </div>
                             
                             <!-- Tombol Sewa: Mengarah ke Form Order -->
-                            <a href="/customer/rent/{{ $item->id }}" class="btn btn-warning fw-bold px-3 btn-sm shadow-sm">
-                                <i class="bi bi-cart-plus me-1"></i>Sewa
-                            </a>
+                            <!-- Tombol Sewa HANYA disembunyikan untuk Admin -->
+                            @if(!Auth::check() || Auth::user()->role !== 'admin')
+                                <a href="{{ route('rent.create', $item->id) }}" class="btn btn-warning btn-sm fw-bold">
+                                    <i class="bi bi-cart-plus me-1"></i> Sewa
+                                </a>
+                            @else
+                                <span class="badge bg-secondary">Mode Admin</span>
+                            @endif
                         </div>
                     </div>
                 </div>

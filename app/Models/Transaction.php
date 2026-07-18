@@ -20,6 +20,12 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function transactionDetails()
+    {
+        return $this->hasMany(TransactionDetail::class);
+    }
+
+
     // Relasi ke Detail Transaksi (1 Nota punya BANYAK detail barang sewaan)
     public function details()
     {

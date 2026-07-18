@@ -12,9 +12,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Katalog Alat</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/customer/history">Riwayat Sewa</a>
-                </li>
+                <!-- Hanya tampilkan Riwayat Sewa jika yang login adalah Customer -->
+                @if(Auth::check() && Auth::user()->role === 'customer')
+                    <li class="nav-item">
+                        <a class="nav-link" href="/customer/history">Riwayat Sewa</a>
+                    </li>
+                @endif
                 
                 <!-- JIKA PENGGUNA SUDAH LOGIN -->
                 @auth
