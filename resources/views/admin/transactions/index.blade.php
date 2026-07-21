@@ -42,9 +42,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <form action="{{ route('admin.transactions.update_status', $trx->id) }}" method="POST" class="d-flex gap-2">
+                                        <!-- Ubah tag form menjadi seperti ini -->
+                                        <form action="/admin/transactions/{{ $trx->id }}/status" method="POST" class="d-flex gap-2">
                                             @csrf
                                             @method('PUT')
+                                            
+                                            <!-- Bagian select dan button biarkan sama seperti sebelumnya -->
                                             <select name="status" class="form-select form-select-sm" {{ in_array($trx->status, ['completed', 'cancelled']) ? 'disabled' : '' }}>
                                                 <option value="pending" {{ $trx->status == 'pending' ? 'selected' : '' }}>Pending (Menunggu)</option>
                                                 <option value="active" {{ $trx->status == 'active' ? 'selected' : '' }}>Active (Disewa)</option>

@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark"><i class="bi bi-camera me-2 text-warning"></i>Daftar Alat Fotografi</h2>
         <!-- Tombol Tambah Alat (Nanti kita fungsikan di tahap Create) -->
-        <a href="#" class="btn btn-warning fw-bold shadow-sm">
+        <a href="{{ route('equipment.create') }}" class="btn btn-warning fw-bold shadow-sm">
             <i class="bi bi-plus-circle me-1"></i> Tambah Alat Baru
         </a>
     </div>

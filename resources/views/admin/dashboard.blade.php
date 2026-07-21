@@ -26,7 +26,10 @@
                 <div class="card-body p-4">
                     <h6 class="text-uppercase fw-semibold text-dark-50">Transaksi Aktif</h6>
                     <h2 class="display-6 fw-bold my-2">0 Transaksi</h2>
-                    <a href="#" class="text-dark-50 text-decoration-none small text-dark">Lihat Semua Transaksi <i class="bi bi-arrow-right ms-1"></i></a>
+                    <!-- Ubah href-nya menjadi seperti ini -->
+                    <a href="/admin/transactions" class="text-dark text-decoration-none fw-bold">
+                        Lihat Semua Transaksi &rarr;
+                    </a>
                 </div>
             </div>
         </div>
