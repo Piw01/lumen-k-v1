@@ -1,58 +1,49 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
     <div class="container">
-        <!-- Logo Brand -->
-        <a class="navbar-brand fw-bold text-warning" href="/">
+        <a class="navbar-brand fw-bold text-warning fs-4" href="{{ route('home') }}">
             <i class="bi bi-camera-reels-fill me-2"></i>Lumen-K
         </a>
-        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <!-- Tautan Katalog Alat (Dapat diakses siapapun ke Halaman Utama) -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Katalog Alat</a>
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active text-warning fw-bold' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('catalog.*') ? 'active text-warning fw-bold' : '' }}" href="{{ route('catalog.index') }}">
+                        <i class="bi bi-grid-fill me-1"></i>Katalog Alat
+                    </a>
+                </li>
+            </ul>
 
+            <div class="d-flex align-items-center gap-2">
                 @auth
-                    <!-- Tautan Khusus Customer -->
-                    @if(Auth::user()->role === 'customer')
-                        <li class="nav-item">
-                            <a class="nav-link" href="/customer/history">Riwayat Sewa</a>
-                        </li>
+                    @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-warning btn-sm fw-bold">Dashboard Admin</a>
+                    @else
+                        <a href="{{ route('rent.history') }}" class="btn btn-outline-light btn-sm">Riwayat Sewa</a>
                     @endif
 
-                    <!-- Tautan Khusus Admin -->
-                    @if(Auth::user()->role === 'admin')
-                        <li class="nav-item">
-                            <a class="nav-link text-warning fw-bold" href="/admin/dashboard">Dashboard Admin</a>
-                        </li>
-                    @endif
-
-                    <!-- Dropdown Profile & Logout -->
-                    <li class="nav-item dropdown ms-lg-3">
-                        <a class="nav-link dropdown-toggle text-warning fw-semibold" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                    <div class="dropdown">
+                        <button class="btn btn-warning btn-sm dropdown-toggle fw-bold" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
                             <li>
-                                <form action="/logout" method="POST" class="m-0">
+                                <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item text-danger">
-                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                    </button>
+                                    <button type="submit" class="dropdown-item text-danger fw-bold"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
                                 </form>
                             </li>
                         </ul>
-                    </li>
+                    </div>
                 @else
-                    <li class="nav-item ms-lg-3">
-                        <a class="btn btn-outline-warning btn-sm px-3" href="/login">Login</a>
-                    </li>
+                    <a href="{{ route('login') }}" class="btn btn-warning btn-sm fw-bold px-3">Masuk / Login</a>
                 @endauth
-            </ul>
+            </div>
         </div>
     </div>
 </nav>

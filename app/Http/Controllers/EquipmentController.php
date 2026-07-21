@@ -95,4 +95,66 @@ class EquipmentController extends Controller
 
         return redirect()->route('equipment.index')->with('success', 'Alat berhasil dihapus!');
     }
+
+    /**
+     * Menampilkan Halaman Katalog Lengkap dengan Pencarian & Filter Cerdas
+     */
+    public function publicCatalog(Request $request)
+    {
+        $query = Equipment::query();
+
+        // 1. Pencarian Cerdas (Nama, Deskripsi, atau Tipe)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        // 2. Filter Kategori / Tipe Alat
+        if ($request->filled('category') && $request->category !== 'all') {
+            $query->where('type', $request->category);
+        }
+
+        // 3. Urutkan / Smart Sorting
+        switch ($request->get('sort')) {
+            case 'newest':
+                $query->latest();
+                break;
+            case 'price_low':
+                $query->orderBy('price_per_day', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price_per_day', 'desc');
+                break;
+            case 'name_az':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name_za':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'recommended':
+            default:
+                $query->orderBy('stock_quantity', 'desc')->latest();
+                break;
+        }
+
+        // Pagination 20 item per halaman
+        $equipments = $query->paginate(20)->withQueryString();
+
+        // Ambil daftar kategori unik dari database
+        $categories = Equipment::select('type')->whereNotNull('type')->distinct()->pluck('type');
+
+        return view('catalog.index', compact('equipments', 'categories'));
+    }
+
+    /**
+     * Menampilkan Detail Produk (Gaya Zenon Rental)
+     */
+    public function publicShow(Equipment $equipment)
+    {
+        return view('catalog.show', compact('equipment'));
+    }
 }

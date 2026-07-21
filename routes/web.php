@@ -18,6 +18,12 @@ Route::get('/', function () {
     return view('welcome', compact('equipment'));
 })->name('home');
 
+// 2. Halaman Katalog Lengkap (Pencarian, Filter, Pagination 20 Data)
+Route::get('/catalog', [EquipmentController::class, 'publicCatalog'])->name('catalog.index');
+
+// 3. Halaman Detail Produk (Style Zenon Rental)
+Route::get('/catalog/{equipment}', [EquipmentController::class, 'publicShow'])->name('catalog.show');
+
 // 2. Rute Autentikasi (Khusus Guest / Belum Login)
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
