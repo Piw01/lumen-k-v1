@@ -85,14 +85,32 @@
                 </div>
 
                 <!-- Tombol Action -->
+                <!-- Tombol Action -->
                 <div class="d-grid gap-2">
-                    @if($equipment->stock_quantity > 0)
-                        <a href="{{ route('rent.create', $equipment->id) }}" class="btn btn-warning btn-lg fw-bold shadow-sm py-3">
-                            <i class="bi bi-cart-plus-fill me-2"></i>Sewa Alat Sekarang
+                    @if(Auth::check() && Auth::user()->role === 'admin')
+                        <!-- Tampilan Khusus Akun Admin -->
+                        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center mb-2">
+                            <i class="bi bi-shield-lock-fill fs-3 me-3 text-info"></i>
+                            <div>
+                                <strong>Mode Administrator</strong><br>
+                                <small class="text-muted">Anda login sebagai Admin. Akun admin tidak dapat menyewa alat, namun Anda dapat mengedit data alat ini.</small>
+                            </div>
+                        </div>
+
+                        <a href="{{ route('equipment.edit', $equipment->id) }}" class="btn btn-primary btn-lg fw-bold shadow-sm py-3">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Data Alat Ini
                         </a>
                     @else
-                        <button class="btn btn-secondary btn-lg fw-bold py-3" disabled>Stok Sedang Habis</button>
+                        <!-- Tampilan Khusus Customer / Guest -->
+                        @if($equipment->stock_quantity > 0)
+                            <a href="{{ route('rent.create', $equipment->id) }}" class="btn btn-warning btn-lg fw-bold shadow-sm py-3">
+                                <i class="bi bi-cart-plus-fill me-2"></i>Sewa Alat Sekarang
+                            </a>
+                        @else
+                            <button class="btn btn-secondary btn-lg fw-bold py-3" disabled>Stok Sedang Habis</button>
+                        @endif
                     @endif
+
                     <a href="{{ route('catalog.index') }}" class="btn btn-outline-dark fw-bold">
                         &larr; Kembali ke Katalog
                     </a>

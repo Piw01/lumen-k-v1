@@ -14,12 +14,22 @@ class TransactionController extends Controller
     // 1. Menampilkan Form Penyewaan
     public function create(Equipment $equipment)
     {
+        // Block jika user yang login adalah Admin
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('catalog.show', $equipment->id)
+                             ->with('error', 'Administrator tidak diperbolehkan melakukan transaksi sewa.');
+        }
         return view('customer.rent', compact('equipment'));
     }
 
     // 2. Memproses Penyimpanan Transaksi & Potong Stok
     public function store(Request $request, Equipment $equipment)
     {
+        // Block jika user yang login adalah Admin
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('catalog.show', $equipment->id)
+                             ->with('error', 'Administrator tidak diperbolehkan melakukan transaksi sewa.');
+        }
         // Validasi data input sewa
         $request->validate([
             'start_date' => 'required|date|after_or_equal:today',
