@@ -39,11 +39,4 @@ Route::middleware('auth')->group(function () {
 
     // RUTE BARU CUSTOMER: Melihat Riwayat Sewa Alat
     Route::get('/customer/history', [TransactionController::class, 'history'])->name('rent.history');
-    Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    // ... rute equipment yang sudah ada ...
-    
-    // Rute Manajemen Transaksi Admin
-    Route::get('/transactions', [App\Http\Controllers\TransactionController::class, 'adminIndex'])->name('admin.transactions.index');
-    Route::put('/transactions/{transaction}/status', [App\Http\Controllers\TransactionController::class, 'updateStatus'])->name('admin.transactions.update_status');
-});
 });
