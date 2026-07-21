@@ -1,7 +1,6 @@
 <x-layout>
     <x-slot:title>Kelola Transaksi | Lumen-K</x-slot:title>
     
-    <x-navbar></x-navbar>
 
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -19,7 +18,7 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-dark">  
+                        <thead class="table-dark">
                             <tr>
                                 <th>No. Transaksi</th>
                                 <th>Peminjam</th>
