@@ -24,25 +24,31 @@ class TransactionController extends Controller
         $request->validate([
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
-            'quantity' => 'required|integer|min:1|max:' . $equipment->stock_quantity,
+            'quantity' => "required|integer|min:1|max:{$equipment->stock_quantity}",
         ]);
 
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $quantity = $request->input('quantity');
+
         // Hitung selisih hari sewa
-        $start = new \DateTime($request->start_date);
-        $end = new \DateTime($request->end_date);
+        $start = new \DateTime($startDate);
+        $end = new \DateTime($endDate);
         $days = $end->diff($start)->days;
-        if ($days == 0) $days = 1;
+        if ($days === 0) {
+            $days = 1;
+        }
 
         // Hitung total harga
-        $totalPrice = $equipment->price_per_day * $days * $request->quantity;
+        $totalPrice = $equipment->price_per_day * $days * $quantity;
 
         // Menggunakan Database Transaction demi keamanan data (ACID)
-        DB::transaction(function () use ($request, $equipment, $totalPrice) {
+        DB::transaction(function () use ($startDate, $endDate, $quantity, $equipment, $totalPrice) {
             // A. Simpan ke tabel transactions (Sudah ditambahkan start_date & end_date)
             $transaction = Transaction::create([
                 'user_id' => Auth::id(),
-                'start_date' => $request->start_date, // <-- BARIS BARU: Menyimpan tanggal mulai
-                'end_date' => $request->end_date,     // <-- BARIS BARU: Menyimpan tanggal selesai
+                'start_date' => $startDate,
+                'end_date' => $endDate,
                 'total_price' => $totalPrice,
                 'status' => 'pending', 
             ]);
@@ -51,12 +57,12 @@ class TransactionController extends Controller
             TransactionDetail::create([
                 'transaction_id' => $transaction->id,
                 'equipment_id' => $equipment->id,
-                'quantity' => $request->quantity,
+                'quantity' => $quantity,
                 'subtotal' => $totalPrice,
             ]);
 
             // C. POTONG STOK ALAT: Mengurangi stok kamera di database
-            $equipment->stock_quantity -= $request->quantity;
+            $equipment->stock_quantity -= $quantity;
             $equipment->save();
         });
 
@@ -69,7 +75,7 @@ class TransactionController extends Controller
     {
         // Mengambil transaksi milik user yang login, diurutkan dari yang paling baru
         // Menggunakan eager loading 'transactionDetails.equipment' agar query efisien
-        $transactions = Transaction::where('user_id', Auth::id())
+        $transactions = Transaction::where('user_id', '=', Auth::id())
             ->with('transactionDetails.equipment')
             ->latest()
             ->get();
@@ -98,9 +104,11 @@ class TransactionController extends Controller
             'status' => 'required|in:pending,active,completed,cancelled'
         ]);
 
+        $status = $request->input('status');
+
         // Cek jika status diubah menjadi "completed" atau "cancelled"
         // dan status sebelumnya BUKAN completed/cancelled (mencegah stok bertambah berulang kali)
-        if (in_array($request->status, ['completed', 'cancelled']) && !in_array($transaction->status, ['completed', 'cancelled'])) {
+        if (\in_array($status, ['completed', 'cancelled']) && !\in_array($transaction->status, ['completed', 'cancelled'])) {
             // Kembalikan stok alat
             foreach ($transaction->transactionDetails as $detail) {
                 $equipment = $detail->equipment;
@@ -110,7 +118,7 @@ class TransactionController extends Controller
         }
 
         // Perbarui status transaksi
-        $transaction->update(['status' => $request->status]);
+        $transaction->update(['status' => $status]);
 
         return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui!');
     }

@@ -10,7 +10,7 @@ class EquipmentController extends Controller
 {
     public function index()
     {
-        $equipment = Equipment::latest()->get();
+        $equipment = Equipment::orderBy('created_at', 'desc')->get();
         return view('admin.equipment.index', compact('equipment'));
     }
 
@@ -91,7 +91,7 @@ class EquipmentController extends Controller
             Storage::disk('public')->delete($equipment->image);
         }
 
-        $equipment->delete();
+        Equipment::destroy($equipment->id);
 
         return redirect()->route('equipment.index')->with('success', 'Alat berhasil dihapus!');
     }
