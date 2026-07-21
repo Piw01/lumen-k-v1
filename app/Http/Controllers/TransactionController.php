@@ -76,4 +76,42 @@ class TransactionController extends Controller
 
         return view('customer.history', compact('transactions'));
     }
+    /**
+     * Menampilkan daftar semua transaksi untuk Admin.
+     */
+    public function adminIndex()
+    {
+        // Mengambil semua transaksi beserta data user dan detail alat
+        $transactions = Transaction::with(['user', 'transactionDetails.equipment'])
+                        ->latest()
+                        ->get();
+                        
+        return view('admin.transactions.index', compact('transactions'));
+    }
+
+    /**
+     * Memperbarui status transaksi dan mengembalikan stok jika selesai/dibatalkan.
+     */
+    public function updateStatus(Request $request, Transaction $transaction)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,active,completed,cancelled'
+        ]);
+
+        // Cek jika status diubah menjadi "completed" atau "cancelled"
+        // dan status sebelumnya BUKAN completed/cancelled (mencegah stok bertambah berulang kali)
+        if (in_array($request->status, ['completed', 'cancelled']) && !in_array($transaction->status, ['completed', 'cancelled'])) {
+            // Kembalikan stok alat
+            foreach ($transaction->transactionDetails as $detail) {
+                $equipment = $detail->equipment;
+                $equipment->stock_quantity += $detail->quantity;
+                $equipment->save();
+            }
+        }
+
+        // Perbarui status transaksi
+        $transaction->update(['status' => $request->status]);
+
+        return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui!');
+    }
 }
