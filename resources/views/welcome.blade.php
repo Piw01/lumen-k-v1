@@ -18,12 +18,9 @@
                 <div class="card h-100 shadow-sm border-0 card-hover">
                     <!-- Placeholder Gambar Kamera -->
                     <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://via.placeholder.com/600x400?text=Lumen-K+Equipment' }}" 
-                        class="card-img-top" 
-                        alt="{{ $item->name }}" 
-                        style="height: 220px; object-fit: cover;">
-                    <div class="bg-secondary-subtle text-center py-5 rounded-top">
-                        <i class="bi bi-camera text-secondary display-4"></i>
-                    </div>
+                            class="card-img-top" 
+                            alt="{{ $item->name }}" 
+                            style="height: 220px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         
                         <h5 class="card-title fw-bold text-dark mb-1">{{ $item->name }}</h5>
