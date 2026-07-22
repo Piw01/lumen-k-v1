@@ -87,7 +87,7 @@
                 <!-- Tombol Action -->
                 <!-- Tombol Action -->
                 <div class="d-grid gap-2">
-                    @if(Auth::check() && Auth::user()->role === 'admin')
+                    @if(Auth::check() && in_array(Auth::user()->role, ['super_admin', 'staff']))
                         <!-- Tampilan Khusus Akun Admin -->
                         <div class="alert alert-info border-0 shadow-sm d-flex align-items-center mb-2">
                             <i class="bi bi-shield-lock-fill fs-3 me-3 text-info"></i>

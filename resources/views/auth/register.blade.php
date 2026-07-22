@@ -1,6 +1,5 @@
 <x-layout>
     <x-slot:title>Daftar Akun | Lumen-K</x-slot:title>
-    <x-navbar></x-navbar>
 
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">

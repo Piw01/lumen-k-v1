@@ -15,7 +15,7 @@ class TransactionController extends Controller
     public function create(Equipment $equipment)
     {
         // Block jika user yang login adalah Admin
-        if (auth()->user()->role === 'admin') {
+        if (in_array(auth()->user()->role, ['super_admin', 'staff'])) {
             return redirect()->route('catalog.show', $equipment->id)
                              ->with('error', 'Administrator tidak diperbolehkan melakukan transaksi sewa.');
         }

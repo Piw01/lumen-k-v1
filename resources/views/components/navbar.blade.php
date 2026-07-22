@@ -21,7 +21,7 @@
 
             <div class="d-flex align-items-center gap-2">
                 @auth
-                    @if(auth()->user()->role === 'admin')
+                    @if(in_array(auth()->user()->role, ['super_admin', 'staff']))
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-warning btn-sm fw-bold">Dashboard Admin</a>
                     @else
                         <a href="{{ route('rent.history') }}" class="btn btn-outline-light btn-sm">Riwayat Sewa</a>
