@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController; // Import di atas
 use App\Models\Equipment;
 
 /*
@@ -64,10 +65,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'storeRegister']);
 });
 
+
 // 7. Rute Panel Pengelola (Super Admin & Staff)
 Route::middleware(['auth', 'role:super_admin,staff'])->prefix('admin')->group(function () {
     
-    // Semua yang ada di dalam grup ini bisa diakses Super Admin & Staff
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -78,7 +79,6 @@ Route::middleware(['auth', 'role:super_admin,staff'])->prefix('admin')->group(fu
     
     // Fitur Khusus: Hanya bisa diakses oleh Super Admin
     Route::middleware(['role:super_admin'])->group(function () {
-        // Nanti kamu bisa tambah rute kelola staff/admin baru di sini
-        // Route::resource('users', UserController::class); 
+        Route::resource('users', UserController::class); // Rute kelola pengguna/staf
     });
 });
