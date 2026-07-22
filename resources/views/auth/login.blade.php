@@ -29,6 +29,10 @@
                         </div>
                         
                         <button type="submit" class="btn btn-warning w-100 fw-bold">Masuk</button>
+
+                        <p class="text-center text-muted mt-2    small">
+                            Belum punya akun? <a href="{{ route('register') }}" class="text-decoration-none fw-bold text-dark hover-primary">Daftar di sini</a>
+                        </p>
                     </form>
                 </div>
             </div>

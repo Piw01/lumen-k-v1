@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User; // Tambahkan ini
+use Illuminate\Support\Facades\Hash; // Tambahkan ini
 
 class AuthController extends Controller
 {
@@ -48,5 +50,38 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
+    }
+
+    public function register()
+    {
+        return view('auth.register');
+    }
+
+    /**
+     * Proses pendaftaran akun baru
+     */
+    public function storeRegister(Request $request)
+    {
+        // 1. Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed', // Harus ada input 'password_confirmation' di form
+        ], [
+            'email.unique' => 'Email ini sudah terdaftar. Silakan gunakan email lain atau login.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'password.min' => 'Password minimal harus 8 karakter.'
+        ]);
+
+        // 2. Simpan user ke database dengan role otomatis 'customer'
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'customer', // Paksa role menjadi customer untuk keamanan
+        ]);
+
+        // 3. Arahkan kembali ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silakan login untuk mulai menyewa alat.');
     }
 }

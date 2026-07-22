@@ -52,3 +52,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::get('/transactions', [TransactionController::class, 'adminIndex'])->name('admin.transactions.index');
     Route::put('/transactions/{transaction}/status', [TransactionController::class, 'updateStatus'])->name('admin.transactions.update_status');
 });
+
+// 4. Rute Autentikasi (Guest)
+Route::middleware('guest')->group(function () {
+    // Login
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'authenticate']);
+    
+    // Tambahkan Rute Register
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'storeRegister']);
+});
