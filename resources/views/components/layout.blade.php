@@ -63,7 +63,7 @@
                     <h6 class="fw-bold text-white mb-3">Hubungi Store</h6>
                     <p class="text-white-50 small mb-1"><i class="bi bi-whatsapp me-2 text-success"></i>WA 24 Jam: <strong>0813-6779-8300</strong></p>
                     <p class="text-white-50 small mb-1"><i class="bi bi-envelope me-2 text-warning"></i>support@lumenk.com</p>
-                    <p class="text-white-50 small"><i class="bi bi-geo-alt me-2 text-danger"></i>Bandung, Ciamis, & Subang</p>
+                    <p class="text-white-50 small"><i class="bi bi-geo-alt me-2 text-danger"></i>Bandung & Subang</p>
                 </div>
             </div>
 

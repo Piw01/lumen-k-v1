@@ -15,7 +15,7 @@ use App\Models\Equipment;
 
 // 1. Halaman Utama / Katalog Alat (Bisa diakses Guest, Customer, maupun Admin)
 Route::get('/', function () {
-    $equipment = Equipment::latest('id')->get();
+    $equipment = Equipment::latest('id')->take(6)->get();
     return view('welcome', compact('equipment'));
 })->name('home');
 
